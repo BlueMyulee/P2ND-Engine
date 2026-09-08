@@ -10,9 +10,10 @@ namespace Engine.Game.Resource.Load.IO
 {
     public class Assets
     {
-        public static List<Engine.Game.Resource.Load.Assets.Material> mat = new();
-        public static List<Engine.Game.Resource.Load.Assets.Models> models = new();
-        public static List<Engine.Game.Resource.Load.Assets.MapCluster> mapCl = new();
+        public static List<Load.Assets.Material> mat = new();
+        public static List<Load.Assets.Models> models = new();
+        public static List<Load.Assets.MapCluster> mapCl = new();
+        public static List<Load.Assets.EntityFabs> entFab = new();
 
         public static void LoadMaterials()
         {
@@ -20,7 +21,7 @@ namespace Engine.Game.Resource.Load.IO
             for(int i = 0; i < dirFileCount; i++)
             {
                 string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/materials/{i.ToString("x6")}.p2mat");
-                Console.WriteLine(readfile);
+                Console.WriteLine("\n|| MATERIAL: " + readfile);
                 var matload = JsonSerializer.Deserialize<Game.Resource.Load.Assets.Material>(readfile);
 
                 mat.AddRange(matload);
@@ -49,13 +50,27 @@ namespace Engine.Game.Resource.Load.IO
             int dirFileCount = Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "/resources/mapclusters/", "*.p2mapcl").Count();
             for(int i = 1; i < dirFileCount; i++)
             {
-                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/models/{i.ToString("x6")}.p2matcl");
+                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/models/{i.ToString("x6")}.p2mapcl");
                 Console.WriteLine("\n|| MAPCLUSTER: " + readfile);
                 var mapload = JsonSerializer.Deserialize<Game.Resource.Load.Assets.MapCluster>(readfile);
 
                 mapCl.AddRange(mapload);
             }
         }
+
+        public static void LoadEntity() 
+        {
+            int dirFileCount = Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "/resources/entity/", "*.p2ent").Count();
+            for(int i = 1; i < dirFileCount; i++)
+            {
+                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/models/{i.ToString("x6")}.p2ent");
+                Console.WriteLine("\n|| ENT: " + readfile);
+                var entload = JsonSerializer.Deserialize<Game.Resource.Load.Assets.EntityFabs>(readfile);
+
+                entFab.AddRange(entload);
+            }
+        }
+        
         
     }
 }

@@ -31,9 +31,11 @@ namespace Engine.Render
                 //Console.WriteLine(Scenestate.ligt[0].Position);
                 BeginMode3D(ControlCorrespondant.camfps);
                 DrawGrid(40, 5);
+                DrawCube(new Vector3(0, 0, 100), 1, 1, 1, Color.White);
+                DrawCube(new Vector3(0, 0, -100), 1, 1, 1, Color.White);
+                DrawCube(new Vector3(0, 100, 0), 1, 1, 1, Color.White);
+                DrawCube(new Vector3(0, -100, 0), 1, 1, 1, Color.White);
                 RenderBrush();
-                DrawCube(new Vector3(0, 0, 100), 1, 1, 1, Raylib_cs.Color.Blue);
-                DrawCube(new Vector3(0, 0, -100), 1, 1, 1, Raylib_cs.Color.Blue);
                 //DrawModel(Scenestate.entities[0].Getcomponent<Mesh3D>().model, Vector3.Zero, 1, Raylib_cs.Color.White);
                 TransformSystem.Update(GetFrameTime());
                 Mesh3DSystem.Update(GetFrameTime());

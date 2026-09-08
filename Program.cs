@@ -15,7 +15,7 @@ Changed team name from CSoft to WFIO
 Part of a project being made by WFIO With Codename:
 P2D Radiant.
 
-CURRENT UPDATE: "Cavelier"
+Rm9yIHRoZSBnbG9yeSBvZiBKZXN1cyBDaHJpc3Q=
 
 ****************************************/
 namespace RDN
@@ -40,7 +40,7 @@ namespace RDN
             Engine.Game.Resource.Load.IO.Assets.LoadMaterials();
             Scenestate.States.SwitcScene(4);
             Rlgl.EnableDepthTest();
-            SetTargetFPS(120);
+            SetTargetFPS(1000);
                 while (!WindowShouldClose())
                 {
                     Process currentProcess = Process.GetCurrentProcess();

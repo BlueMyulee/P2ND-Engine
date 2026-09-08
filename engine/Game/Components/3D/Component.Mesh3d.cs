@@ -28,8 +28,5 @@ namespace ComponentSystem
                 DrawModel(model, t.position, t.scale.X, Raylib_cs.Color.White);
             }
         }
-
-
     }
-
 }
