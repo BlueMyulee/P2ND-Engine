@@ -60,7 +60,9 @@ namespace Engine.Game.Resource.Load.Assets
                             //Also, Mapcluster domains will be 200 x 200 x 200
         public int mapName { get; set; }
         public int[] entityRef { get; set; }
-        
+        public float entTransformX;
+        public float entTransformY;
+        public float entTransformZ;
         public int XLeftAdjecent { get; set; } 
         public int XRightAdjecent { get; set; } 
         public int YUpAdjecent { get; set; } 
