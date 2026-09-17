@@ -38,6 +38,8 @@ namespace RDN
             //Raylib.ToggleBorderlessWindowed();
             Engine.Game.Resource.Load.IO.Assets.LoadModels();
             Engine.Game.Resource.Load.IO.Assets.LoadMaterials();
+            Engine.Game.Resource.Load.IO.Assets.LoadMapClusters();
+            Engine.Game.Resource.Load.IO.Assets.LoadEntity();
             Scenestate.States.SwitcScene(4);
             Rlgl.EnableDepthTest();
             SetTargetFPS(1000);

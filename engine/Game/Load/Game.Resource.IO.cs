@@ -48,26 +48,27 @@ namespace Engine.Game.Resource.Load.IO
         public static void LoadMapClusters()//NOTE, Mapclusters are 200x200 
         {
             int dirFileCount = Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "/resources/mapclusters/", "*.p2mapcl").Count();
-            for(int i = 1; i < dirFileCount; i++)
+            for(int i = 0; i < dirFileCount; i++)
             {
-                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/models/{i.ToString("x6")}.p2mapcl");
+                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/mapclusters/{i.ToString("x6")}.p2mapcl");
                 Console.WriteLine("\n|| MAPCLUSTER: " + readfile);
                 var mapload = JsonSerializer.Deserialize<Game.Resource.Load.Assets.MapCluster>(readfile);
 
-                mapCl.AddRange(mapload);
+                mapCl.Add(mapload);
             }
+            Console.WriteLine("\n|| INFO: MAPCLUSTER: All addresses loaded successfully");
         }
 
         public static void LoadEntity() 
         {
             int dirFileCount = Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "/resources/entity/", "*.p2ent").Count();
-            for(int i = 1; i < dirFileCount; i++)
+            for(int i = 0; i < dirFileCount; i++)
             {
-                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/models/{i.ToString("x6")}.p2ent");
+                string readfile = File.ReadAllText(Directory.GetCurrentDirectory() + $"/resources/entity/{i.ToString("x6")}.p2ent");
                 Console.WriteLine("\n|| ENT: " + readfile);
                 var entload = JsonSerializer.Deserialize<Game.Resource.Load.Assets.EntityFabs>(readfile);
 
-                entFab.AddRange(entload);
+                entFab.Add(entload);
             }
         }
         

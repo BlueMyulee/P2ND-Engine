@@ -2,6 +2,7 @@
 using System.Numerics;
 using Engine.Game.Resource.Load.Assets;
 using Engine.Game.Resource.Load.IO;
+using ComponentSystem;
 namespace Engine.scenestate
 {
     class Entity
@@ -9,27 +10,65 @@ namespace Engine.scenestate
         public static void LoadMapClusterData(int mapClusterLocation)
         {
             var mapclust = Game.Resource.Load.IO.Assets.mapCl;
-
+            
+            Console.WriteLine("\n\n\n\n GRINKLE1");
             for(int n = 0; n < mapclust[mapClusterLocation].entityRef.Length; n++)
             {
-                SetupEntitiesInCluster(mapclust[mapClusterLocation].entityRef[n], new Vector3(mapclust[mapClusterLocation].entTransformX, mapclust[mapClusterLocation].entTransformY, mapclust[mapClusterLocation].entTransformZ));
+                
+                Console.WriteLine($"\n\n\n\n {mapclust.Count}");
+                SetupEntitiesInCluster(mapclust[mapClusterLocation].entityRef[n], new Vector3(mapclust[mapClusterLocation].entTransformX[n], mapclust[mapClusterLocation].entTransformY[n], mapclust[mapClusterLocation].entTransformZ[n]), 1.0f);
+
             }
             
         }
 
-        public static void SetupEntitiesInCluster(int addr, Vector3 transf)
+        public static void SetupEntitiesInCluster(int addr, Vector3 transf, float scale)
         {
-            var ents = Engine_Scenestates.Scenestate.entities;
-            ents.Add(new Game.Entity());
-            int curcount = ents.Count - 1;
+            
+            Engine_Scenestates.Scenestate.entities.Add(new Game.Entity());
+            Console.WriteLine($"\n\n DEBUG: ATTEMPING TO FIND pass\n\n\n\n");
+            int curcount = Engine_Scenestates.Scenestate.entities.Count - 1;
 
-            var entities = Assets.entFab[addr];
+            var entloc = Assets.entFab;
 
-            for(int i = 0; i < entities.Components.Length; i++)
+            Console.WriteLine($"\n\n DEBUG: ATTEMPING TO FIND {entloc[0].Components.Length}\n\n\n\n");
+
+            for(int i = 0; i < entloc[addr].Components.Length; i++) // Specifically this
             {
-                if(entities.Components[i].Contains(':'))
+                Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new Transform());
+                Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Transform>().position = transf;
+                Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Transform>().scale.X = scale;
+
+                if(entloc[addr].Components[i].Contains(':'))
                 {
+                    string[] tags = entloc[addr].Components[i].Split(':');
+                    int reference = 0;
                     
+                    for(int n = 0 ; n < tags.Length; n++)
+                    {
+                        //reference = reference.Append(1).ToArray();
+                        reference = Convert.ToInt32(tags[1]);
+                    }
+                    switch(tags[0])
+                    {
+                        case "mesh":   
+                            Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new Mesh3D());
+                            Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().meshAssigned = reference;
+                        break;
+
+                        case "mats":
+                            //for(int w = 0; w < )
+                                Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned = Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned.Append(1).ToArray();
+                                Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned[0] = reference;
+          
+                        break;
+                    }
+                }else
+                {
+
+
+
+
                 }
 
             }

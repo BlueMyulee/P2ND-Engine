@@ -1,0 +1,13 @@
+{
+    "MaterialId" : 1, 
+    "MaterialName":"GrinkleSenpai",
+    "Shader":"PBR",
+    "Albedo":"resources/tex_lib/tex_generic/YJsen.jpg",
+    "Normal":"resources/mesh/test/demotex/concnorma.jpg",
+    "Mrao":"resources/mesh/prereq/default/DefaultTexture.png",
+    "AlbedoIntensity":0,
+    "RoughnessIntensity":100,
+    "MetalnessIntensity":0,
+    "AmbientIntensity":1,
+    "EmissionIntensity":0
+}

@@ -50,9 +50,9 @@ namespace Engine_Scenestates
                 { 
                     ligt.Add(new GameObjects.Lights(new Vector3(100f, 0, 0f), new Vector3(0f, 0.0f, 0.0f), false, Light_types.Point, Raylib_cs.Color.White, 0.0f, Shadercl.Mat_PBR));  
                     //new Vector3(5.5f, -1.0f, 5.0f)
-                    ligt.Add(new GameObjects.Lights(new Vector3(1f, 2f, 1f), new Vector3(10.5f, 0.0f, 8.0f), true, Light_types.Directorional, Raylib_cs.Color.Blue, 30.0f, Shadercl.Mat_PBR));
+                    ligt.Add(new GameObjects.Lights(new Vector3(1f, 2f, 1f), new Vector3(10.5f, 0.0f, 8.0f), true, Light_types.Directorional, Raylib_cs.Color.White, 10.0f, Shadercl.Mat_PBR));
                     //ligt.Add(new GameObjects.Lights(new Vector3(1f, 0f, 1f), new Vector3(10.5f, 1.0f, 4.0f), true, Light_types.Point, Raylib_cs.Color.RayWhite, 0.0f, Shadercl.Mat_PBR));  at_PBR));  
-                    ligt.Add(new GameObjects.Lights(new Vector3(1f, 2f, 1f), new Vector3(12.5f, 0.0f, 9.0f), true, Light_types.Directorional, Raylib_cs.Color.Gold, 30.0f, Shadercl.Mat_PBR));  
+                    ligt.Add(new GameObjects.Lights(new Vector3(1f, 2f, 1f), new Vector3(12.5f, 0.0f, 9.0f), true, Light_types.Directorional, Raylib_cs.Color.SkyBlue, 5.0f, Shadercl.Mat_PBR));  
                     //Engine.Game.Objects.GameObjects.Lights.UpdateShaderValues(ligt[0], Shadercl.Mat_PBR);
                     Engine.Game.Objects.GameObjects.Lights.UpdateShaderValues(ligt[2], Shadercl.Mat_PBR);
                     Engine.Game.Objects.GameObjects.Lights.UpdateShaderValues(ligt[1], Shadercl.Mat_PBR);
@@ -67,25 +67,16 @@ namespace Engine_Scenestates
             {
                 target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
                 yella = LoadShader(null, "resources/shader/screen/yellowfilter.fs");
-                entities.Add(new Entity());
-                ComponentSystem.Transform transform = new ComponentSystem.Transform();
-                transform.position = new Vector3(0, 0, 0);
-                transform.scale.X = 1;
+                Engine.scenestate.Entity.LoadMapClusterData(0);
                 
-                ComponentSystem.Mesh3D mesh = new Mesh3D();
-                mesh.meshAssigned = 0;
-                mesh.materialAssigned = mesh.materialAssigned.Append(1).ToArray();
-                mesh.materialAssigned[0] = 0;
-                entities[0].AddComponent(transform);
-                entities[0].AddComponent(mesh);
-                entities[0].Id = entities.Count - 1;
+                Console.WriteLine($"\n\n\n\nINFO: DEBUG: {entities.Count}");
                 MeshMemorySystem.CheckActiveMeshesInScene();
                 MaterialMemorySystem.checkActiveMaterialInScene();
                 
                                     
 
 
-               // GC.Collect();
+               GC.Collect();
 
             }
         

@@ -52,17 +52,17 @@ namespace Engine.Game.Resource.Load.Assets
 
     public class EntityFabs
     {
-         public string[] Components; 
+         public string[] Components { get; set;} 
     }
 
     public class MapCluster //0x000000 will be pre-requisites., 0x000001 - 0x00000F will be in vertical order, 
     {                       //Subsequently 0x000011 - 0x00001F will move 1 space horizontal and repeat vertical order, rinse and repeat until it becomes 0xFFFFFF.
                             //Also, Mapcluster domains will be 200 x 200 x 200
-        public int mapName { get; set; }
+        public string mapName { get; set; }
         public int[] entityRef { get; set; }
-        public float entTransformX;
-        public float entTransformY;
-        public float entTransformZ;
+        public float[] entTransformX {get; set;}
+        public float[] entTransformY {get; set;}
+        public float[] entTransformZ {get; set;}
         public int XLeftAdjecent { get; set; } 
         public int XRightAdjecent { get; set; } 
         public int YUpAdjecent { get; set; } 

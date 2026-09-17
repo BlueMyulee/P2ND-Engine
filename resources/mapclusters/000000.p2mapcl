@@ -1,0 +1,19 @@
+{
+  "mapName": "grinkletown",
+  "entityRef": [
+    0, 1, 1
+  ],
+  "entTransformX": [
+    0.0, 0.0, 3
+  ],
+  "entTransformY": [
+    0.0, 0.8, 1
+  ],
+  "entTransformZ": [
+    0.0, 0.0, 3
+  ],
+  "xLeftAdjecent": 0,
+  "xRightAdjecent": 0,
+  "yUpAdjecent": 0,
+  "yDownAdjecent": 0
+}
