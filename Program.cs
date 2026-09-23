@@ -6,6 +6,7 @@ using Engine.Resource;
 using Raylib_cs;
 using Engine.Logics.Sub.PlayerCon.FirstPerson;
 using Engine.Render.Optimization.Culling;
+using Engine.Game;
 
 /****************************************
 P2Engine
@@ -42,11 +43,12 @@ namespace RDN
             Engine.Game.Resource.Load.IO.Assets.LoadEntity();
             Scenestate.States.SwitcScene(4);
             Rlgl.EnableDepthTest();
-            SetTargetFPS(1000);
+            SetTargetFPS(200);
                 while (!WindowShouldClose())
                 {
                     Process currentProcess = Process.GetCurrentProcess();
                     ControlCorrespondant.UpdatePlayerLogic();
+                    SkyboxSystem.Update(GetFrameTime());
                     Shadercl.ShaderUpdateRuntimePrePBR();    
                     Renders.Rend_Unified();
                     long privateMemoryBytes = currentProcess.PrivateMemorySize64;

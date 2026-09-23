@@ -21,9 +21,19 @@ namespace Engine.Game
                 component.Update(gameTime);
             }
         }
+
+        public static void Setup()
+        {
+            foreach(T component in components)
+            {
+                component.Setup();
+            }
+        }
     }
 
     class TransformSystem : ComponentBaseSystem<Transform>{ }
     class Mesh3DSystem : ComponentBaseSystem<ComponentSystem.Mesh3D>{ }
     class Mesh3DTransSystem : ComponentBaseSystem<ComponentSystem.Mesh3DTrans>{ }
+    class LightDirSystem : ComponentBaseSystem<LightDir>{ }
+    class SkyboxSystem : ComponentBaseSystem<Skybox> {}
 }

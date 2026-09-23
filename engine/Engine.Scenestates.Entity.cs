@@ -41,32 +41,50 @@ namespace Engine.scenestate
 
                 if(entloc[addr].Components[i].Contains(':'))
                 {
-                    string[] tags = entloc[addr].Components[i].Split(':');
-                    int reference = 0;
+                    string[] tags = entloc[addr].Components[i].Split(':', ' ');
+                    int[] reference = {};
                     
-                    for(int n = 0 ; n < tags.Length; n++)
+                    for(int n = 1 ; n < tags.Length; n++)
                     {
-                        //reference = reference.Append(1).ToArray();
-                        reference = Convert.ToInt32(tags[1]);
+                        reference = reference.Append(1).ToArray();
+                        reference[reference.Length - 1] = Convert.ToInt32(tags[n]);
                     }
                     switch(tags[0])
                     {
                         case "mesh":   
                             Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new Mesh3D());
-                            Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().meshAssigned = reference;
+                            Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().meshAssigned = reference[0];
                         break;
 
                         case "mats":
-                            //for(int w = 0; w < )
+                            for(int w = 0; w < reference.Length; w++)
+                            {
                                 Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned = Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned.Append(1).ToArray();
-                                Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned[0] = reference;
-          
+                                Engine_Scenestates.Scenestate.entities[curcount].GetComponent<Mesh3D>().materialAssigned[w] = reference[w];
+                            }
+
+                        break;
+                        case "lightdir":
+                            Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new LightDir());
+                            var lightdirops = Engine_Scenestates.Scenestate.entities[curcount].GetComponent<LightDir>();
+                            lightdirops.target.X = reference[0];
+                            lightdirops.target.Y = reference[1];
+                            lightdirops.target.Z = reference[2];
+                            lightdirops.intensity = reference[3];
+                        break;
+                        case "lcolor":
                         break;
                     }
-                }else
+                }
+                else
                 {
 
-
+                    switch(entloc[addr].Components[i])
+                    {
+                        case "skybox":
+                        Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new Skybox());
+                        break;
+                    }
 
 
                 }

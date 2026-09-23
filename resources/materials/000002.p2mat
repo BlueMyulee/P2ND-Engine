@@ -1,0 +1,13 @@
+{
+    "MaterialId" : 1, 
+    "MaterialName":"Skybox",
+    "Shader":"STD",
+    "Albedo":"resources/tex_lib/tex_Sky/Cubemap/Cubemap_Sky_15-512x512.png",
+    "Normal":"resources/mesh/test/demotex/concnorma.jpg",
+    "Mrao":"resources/mesh/prereq/default/DefaultTexture.png",
+    "AlbedoIntensity":0,
+    "RoughnessIntensity":100,
+    "MetalnessIntensity":0,
+    "AmbientIntensity":1,
+    "EmissionIntensity":0
+}

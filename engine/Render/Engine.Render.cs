@@ -26,11 +26,13 @@ namespace Engine.Render
 
             public static void Render_3D()
             {
-                Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[0]);
-                Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[1]);
+               // Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[0]);
+               // Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[1]);
+               // Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[2]);
+                //Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[3]);
                 //Console.WriteLine(Scenestate.ligt[0].Position);
                 BeginMode3D(ControlCorrespondant.camfps);
-                DrawGrid(40, 5);
+             //   DrawGrid(40, 5);
                 DrawCube(new Vector3(0, 0, 100), 1, 1, 1, Color.White);
                 DrawCube(new Vector3(0, 0, -100), 1, 1, 1, Color.White);
                 DrawCube(new Vector3(0, 100, 0), 1, 1, 1, Color.White);
@@ -51,8 +53,8 @@ namespace Engine.Render
         {
             public static void Render_FpsCounter()
             {
-                DrawText($"Current fps: {GetFPS()}", 10, 10, 80, Raylib_cs.Color.DarkBlue);
-                DrawText($"Mem: {Engine.Logics.Dev.Variables.memory:F2}MB Actual: {Engine.Logics.Dev.Variables.memoryActual:F2}MB || Screenwidth : {GetScreenWidth()} x {GetScreenHeight()}", 10, 120, 50, Raylib_cs.Color.DarkBlue);
+                DrawText($"Current fps: {GetFPS()}", 10, 10, 80, Raylib_cs.Color.SkyBlue);
+                DrawText($"Mem: {Engine.Logics.Dev.Variables.memory:F2}MB Actual: {Engine.Logics.Dev.Variables.memoryActual:F2}MB || Screenwidth : {GetScreenWidth()} x {GetScreenHeight()}", 10, 120, 50, Raylib_cs.Color.SkyBlue);
                 //BeginBlendMode(BlendMode.Multiplied);
                 //DrawRectangle(0, 0, 2900, 2900, new Raylib_cs.Color(00.957f, 0.851f, 0.20f, 0.07f));
                 //BeginBlendMode(BlendMode.Additive);

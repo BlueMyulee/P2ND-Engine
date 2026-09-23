@@ -1,6 +1,6 @@
 #version 330
 
-#define MAX_LIGHTS              4
+#define MAX_LIGHTS              10
 #define LIGHT_DIRECTIONAL       0
 #define LIGHT_POINT             1
 #define PI 3.14159265358979323846
@@ -167,7 +167,7 @@ void main()
     color = pow(color, color + vec3(1.0));
     
     // Gamma correction
-    color = pow(color, vec3(1.0/1.5));
+    color = pow(color, vec3(0.60/1.5));
 
     finalColor = vec4(color, 1.0);
 }

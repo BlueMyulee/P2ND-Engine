@@ -1,0 +1,198 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GuardFSM_Simple_IR : MonoBehaviour
+{
+
+    public enum GuardState
+    {
+        Evade,
+        Patrol,
+        Attack,
+        Runaway
+    }
+    public GuardState currentState;
+    public bool isSafe;
+    public bool isStronger;
+
+    public GameObject player;
+    public float safeDistance = 5;
+    public float FOVAngle = 120.0f;
+    float cosFOVover2;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        currentState = GuardState.Patrol;
+        isSafe = true;
+        cosFOVover2 = Mathf.Cos(FOVAngle / 2.0f * Mathf.Deg2Rad);
+       
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        FSM();
+
+
+
+    }
+
+    private void FSM()
+    {
+        switch(currentState)
+        {
+            case GuardState.Evade:
+                Evade();
+                break;
+
+            case GuardState.Patrol:
+                Patrol();
+                break;
+
+            case GuardState.Attack:
+                Attack();
+                break;
+
+            case GuardState.Runaway:
+                Runaway();
+                break;
+        }
+
+
+
+
+    }
+
+    private void Runaway()
+    {
+        print("Runaway");
+        
+    }
+
+    private void Attack()
+    {
+        print("Attack");
+        if (!Stronger())
+        {
+            ChangeState(GuardState.Runaway);
+        }
+    }
+
+    private bool Stronger()
+    {
+        return isStronger;
+    }
+
+    private void Patrol()
+    {
+        print("Patrol");
+        if (ThreatenedAndStronger())
+        {
+            ChangeState(GuardState.Attack);
+        }
+        else if (ThreatenedAndWeaker())
+        {
+            ChangeState(GuardState.Runaway);
+        }
+    }
+
+    private bool ThreatenedAndWeaker()
+    {
+        return !Safe() && !Stronger();
+    }
+
+    private bool ThreatenedAndStronger()
+    {
+        return !Safe() && Stronger();
+    }
+
+    private void Evade()
+    {
+        print("Evade");
+
+        if (Safe())
+        {
+            ChangeState(GuardState.Patrol);
+        }
+
+    }
+
+    private void ChangeState(GuardState newState)
+    {
+        print($"Current state changing from {currentState} to {newState})");
+        currentState = newState;
+    }
+
+    private bool Safe()
+    {
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        if (!PlayerVisible())
+        {
+            isSafe = true;
+        }
+        else
+        {
+            isSafe = distanceToPlayer > safeDistance;
+        }
+
+        return isSafe;
+    }
+    private bool PlayerVisible()
+    {
+        return PlayerVisibleSimple();
+        //return PlayerVisibleWithFOV();
+        //return PlayerVisibleViaRayTracing();
+    }
+
+    private bool PlayerVisibleSimple()
+    {
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        float angle = Vector3.Angle(this.transform.forward, directionToPlayer);
+        if (angle <= 90)
+        {
+            print("Player is visible");
+            return true;
+        }
+        else
+        {
+            print("Player is not Visible");
+            return false;
+        }
+
+    }
+    private bool PlayerVisibleWithFOV()
+    {
+        
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        float cosAngle = Vector3.Dot(this.transform.forward, directionToPlayer)/directionToPlayer.magnitude;
+        if (cosAngle >= cosFOVover2)
+        {
+            print("Player is visible");
+            return true;
+        }
+        else
+        {
+            print("Player is not Visible");
+            return false;
+        }
+
+    }
+    
+    private bool PlayerVisibleViaRayTracing()         // Not good
+    {
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, directionToPlayer, out hit))
+        {
+            if (hit.collider.gameObject == player)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    } 
+}

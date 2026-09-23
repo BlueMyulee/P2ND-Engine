@@ -7,5 +7,6 @@ namespace Engine.Game
         public Entity entity;
 
         public virtual void Update(float gameTime) {}
+        public virtual void Setup() {}
     }
 }

@@ -23,30 +23,36 @@ namespace Engine.Render.MaterialSystem
         {
         
 
-            Texture2D albed = LoadTexture(Alb);
-            Texture2D normed = LoadTexture(norm);
-            Texture2D mrted = LoadTexture(mra);
+
             
 
             if(shadr == "PBR")
             {
                 this.shader = Shadercl.Mat_PBR;
-            }
-            GenTextureMipmaps(&albed);
-            GenTextureMipmaps(&normed);
-            GenTextureMipmaps(&mrted);
-            this.albedo = albed;
-            this.normal = normed;
-            this.mrao = mrted;
+                Texture2D albed = LoadTexture(Alb);
+                Texture2D normed = LoadTexture(norm);
+                Texture2D mrted = LoadTexture(mra);            
+                GenTextureMipmaps(&albed);
+                GenTextureMipmaps(&normed);
+                GenTextureMipmaps(&mrted);
+                this.albedo = albed;
+                this.normal = normed;
+                this.mrao = mrted;
 
 
-            SetTextureFilter(this.albedo, TextureFilter.Bilinear);
+             SetTextureFilter(this.albedo, TextureFilter.Bilinear);
             
-            SetTextureFilter(this.normal, TextureFilter.Bilinear);
-            SetTextureFilter(this.normal, TextureFilter.Anisotropic8X);
+                SetTextureFilter(this.normal, TextureFilter.Bilinear);
+                SetTextureFilter(this.normal, TextureFilter.Anisotropic8X);
 
-           SetTextureFilter(this.mrao, TextureFilter.Bilinear);
-           SetTextureFilter(this.mrao, TextureFilter.Anisotropic8X);
+                SetTextureFilter(this.mrao, TextureFilter.Bilinear);
+                SetTextureFilter(this.mrao, TextureFilter.Anisotropic8X);
+            }
+            else
+            {
+                Texture2D albed = LoadTexture(Alb);
+                SetTextureFilter(this.albedo, TextureFilter.Bilinear);
+            }
 
             test = testcheck;
         }
@@ -76,6 +82,11 @@ namespace Engine.Render.MaterialSystem
                         Console.WriteLine("\n" + $"|| INFO: MATERIAL: CurrentVal: {materialref.materialAssigned[n]}\n\n\n\n\n\n");
                         var Loadqueue = Engine.Game.Resource.Load.IO.Assets.mat[materialref.materialAssigned[n]];
                         materials.AddRange(new MaterialsQueue(Loadqueue.Albedo, Loadqueue.Normal, Loadqueue.Mrao, Loadqueue.Shader, Loadqueue.AlbedoIntensity, Loadqueue.RoughnessIntensity, Loadqueue.AmbientIntensity, "checking"));
+                        if(Loadqueue.Shader != "PBR") 
+                        {
+                            SetTextureFilter(materialref.model.Materials[n + 1].Maps[(int)MaterialMapIndex.Albedo].Texture, TextureFilter.Bilinear);
+                            continue;
+                        }
                         materialref.materialAssignedInMemory = materialref.materialAssignedInMemory.Append(1).ToArray();                        
                         materialref.materialAssignedInMemory[n] = materials.Count - 1;
                         Console.WriteLine("\n\n" + $"|| INFO: MATERIAL: CurrentCount: {materialref.model.MaterialCount} {n + 1} {materials.Count} {materialref.materialAssignedInMemory.Length} {materials[0].test}\n\n\n\n\n\n");

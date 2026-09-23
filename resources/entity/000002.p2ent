@@ -1,0 +1,7 @@
+{
+  "Components": [
+    "mesh:2",
+    "mats:2",
+    "skybox"
+  ]
+}
