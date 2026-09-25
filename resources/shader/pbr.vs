@@ -40,6 +40,7 @@ void main()
     fragTangent = normalize(fragTangent - dot(fragTangent, fragNormal)*fragNormal);
     vec3 fragBinormal = normalize(normalMatrix*vertexBinormal);
     fragBinormal = cross(fragNormal, fragTangent);
+    fragColor = vertexColor;
 
     TBN = transpose(mat3(fragTangent, fragBinormal, fragNormal));
 

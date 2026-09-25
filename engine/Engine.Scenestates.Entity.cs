@@ -71,8 +71,11 @@ namespace Engine.scenestate
                             lightdirops.target.Y = reference[1];
                             lightdirops.target.Z = reference[2];
                             lightdirops.intensity = reference[3];
+                            Console.WriteLine($"\n\n\n\n\nINFO: LIGHTPATH ||||| {lightdirops.target.Z}");
                         break;
                         case "lcolor":
+                            Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new lightcolor());
+                            Engine_Scenestates.Scenestate.entities[curcount].GetComponent<lightcolor>().lcolor = colr(reference[0]);
                         break;
                     }
                 }
@@ -89,6 +92,23 @@ namespace Engine.scenestate
 
                 }
 
+            }
+        }
+
+        public static Raylib_cs.Color colr(int col)
+        {
+            switch(col)
+            {
+                case 0:
+                    return Raylib_cs.Color.White;
+                break;
+                case 1:
+                    return Raylib_cs.Color.SkyBlue;
+                break;
+
+                default:
+                    return Raylib_cs.Color.White;
+                break;
             }
         }
 

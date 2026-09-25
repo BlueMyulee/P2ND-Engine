@@ -50,6 +50,8 @@ uniform float emissivePower;
 
 // Input lighting values
 uniform Light lights[MAX_LIGHTS];
+//uniform vec3 lightDir;
+
 uniform vec3 viewPos;
 
 uniform vec3 ambientColor;
@@ -78,6 +80,12 @@ float GeomSmith(float nDotV,float nDotL,float roughness)
     float ggx1 = nDotV/(nDotV*ik + k);
     float ggx2 = nDotL/(nDotL*ik + k);
     return ggx1*ggx2;
+}
+
+vec3 ComputeShadows()
+{
+    
+    return vec3(0, 0, 0);
 }
 
 vec3 ComputePBR()
@@ -164,10 +172,11 @@ void main()
     vec3 color = ComputePBR();
 
     // HDR tonemapping
-    color = pow(color, color + vec3(1.0));
+    //color = pow(color, color + vec3(1.0));
+    color = pow(color, color + vec3(0.8));
     
     // Gamma correction
-    color = pow(color, vec3(0.60/1.5));
+    color = pow(color, vec3(0.5/1.5));
 
     finalColor = vec4(color, 1.0);
 }

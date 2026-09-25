@@ -21,7 +21,8 @@ namespace ComponentSystem
 
         public override void Setup()
         {
-            lights = new GameObjects.Lights(entity.GetComponent<Transform>().position, target, true, Light_types.Directorional, this.color, intensity, Shadercl.Mat_PBR);
+            lights = new GameObjects.Lights(entity.GetComponent<Transform>().position, target, true, Light_types.Directorional, entity.GetComponent<lightcolor>().lcolor, intensity, Shadercl.Mat_PBR);
+            Lighting.UpdateLight(Shadercl.Mat_PBR, this.lights);
         }
 
          public override void Update(float gameTime)
