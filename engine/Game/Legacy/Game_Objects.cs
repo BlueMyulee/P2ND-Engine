@@ -86,13 +86,16 @@ namespace Engine.Game.Objects
             public int targetLoc;
             public int colorLoc;
             public int intensityLoc;
-
+            public int lightVPLoc;
+            public int shadowMapLoc;
+            public static int shadowmapResoultion = 1024;
             public Lights(Vector3 pos, Vector3 targ, bool enbl, Light_types typ, Raylib_cs.Color colr, float intes, Shader shd)
             {
                 Position = pos;
                 Target = targ;
                 Enabled = enbl;
                 Type = typ;
+                
                 Colour = new Vector4(colr.R / 255.0f, colr.G / 255.0f, colr.B / 255.0f, colr.A / 255.0f);
                 /*              Colour[0] = (float)colr.R/255.0f;
                                 Colour[1] = (float)colr.G/255.0f;
@@ -107,6 +110,9 @@ namespace Engine.Game.Objects
                 targetLoc = GetShaderLocation(shd, "lights[" + lightCount + "].target");
                 colorLoc = GetShaderLocation(shd, "lights[" + lightCount + "].color");
                 intensityLoc = GetShaderLocation(shd, "lights[" + lightCount + "].intensity");
+                lightVPLoc = GetShaderLocation(shd, "lightVP");
+                shadowMapLoc = GetShaderLocation(shd, "shadowMap");
+                SetShaderValue(shd, GetShaderLocation(shd, "shadowMapResolution"), shadowmapResoultion, ShaderUniformDataType.Int);
                 System.Console.WriteLine($"||LIGHT PASS {lightCount}............ " + positionLoc + ".");
                 lightCount++;
                 
