@@ -13,6 +13,7 @@ uniform mat4 matModel;
 uniform mat4 matNormal;
 uniform vec3 lightPos;
 uniform vec4 difColor;
+uniform mat4 matLightVP;
 
 // Output vertex attributes (to fragment shader)
 out vec3 fragPosition;
@@ -20,6 +21,9 @@ out vec2 fragTexCoord;
 out vec4 fragColor;
 out vec3 fragNormal;
 out mat3 TBN;
+
+out vec2 fragShadowTexCoord;
+out float fragShadowDepth;
 
 const float normalOffset = 0.1;
 
@@ -46,4 +50,9 @@ void main()
 
     // Calculate final vertex position
     gl_Position = mvp*vec4(vertexPosition, 1.0);
+
+    vec4 worldSpace = matModel*vec4(vertexPosition, 1.0); // position of the model in the scene
+    vec4 screenSpace = matLightVP*worldSpace; // position of the vertex in screen space. 
+        fragShadowDepth = screenSpace.z/screenSpace.w; // .z component is depth in screen space.
+    fragShadowTexCoord = (screenSpace.xy/screenSpace.w)*.5+.5; // .xy is position on the screen
 }

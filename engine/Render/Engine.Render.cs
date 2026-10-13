@@ -6,6 +6,7 @@ using Raylib_cs;
 using Engine.Resource;
 using Engine.Game;
 using System.Numerics;
+using Engine.Render.LightingEngine;
 using ComponentSystem;
 
 namespace Engine.Render
@@ -24,26 +25,23 @@ namespace Engine.Render
                     Shadercl.ShaderUpdateRuntimeDuringPBR();
             }
 
+
             public static void Render_3D()
             {
-               // Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[0]);
-               // Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[1]);
-               // Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[2]);
-                //Lighting.UpdateLight(Shadercl.Mat_PBR, Scenestate.ligt[3]);
-                //Console.WriteLine(Scenestate.ligt[0].Position);
-                BeginMode3D(ControlCorrespondant.camfps);
+            BeginMode3D(ControlCorrespondant.camfps);
              //   DrawGrid(40, 5);
-                DrawCube(new Vector3(0, 0, 100), 1, 1, 1, Color.White);
-                DrawCube(new Vector3(0, 0, -100), 1, 1, 1, Color.White);
-                DrawCube(new Vector3(0, 100, 0), 1, 1, 1, Color.White);
-                DrawCube(new Vector3(0, -100, 0), 1, 1, 1, Color.White);
+                //DrawCube(new Vector3(0, 0, 100), 1, 1, 1, Color.White);
+                //DrawCube(new Vector3(0, 0, -100), 1, 1, 1, Color.White);
+                //DrawCube(new Vector3(0, 100, 0), 1, 1, 1, Color.White);
+               // DrawCube(new Vector3(0, 1, 0), 1, 1, 1, Color.White);
                 RenderBrush();
+                //SetShaderValueMatrix();
                 //DrawModel(Scenestate.entities[0].Getcomponent<Mesh3D>().model, Vector3.Zero, 1, Raylib_cs.Color.White);
                 TransformSystem.Update(GetFrameTime());
                 Mesh3DSystem.Update(GetFrameTime());
-                Rlgl.DisableDepthMask();
+                //Rlgl.DisableDepthMask();
                 Mesh3DTransSystem.Update(GetFrameTime());
-                Rlgl.EnableDepthMask();
+                //Rlgl.EnableDepthMask();
                 EndMode3D();  
             }
             
@@ -64,15 +62,25 @@ namespace Engine.Render
             }
         }
 
-        public static void Rend_Unified()
+        public static unsafe void Rend_Unified()
         {
-            UpdateCamera(ref ControlCorrespondant.camfps, CameraMode.Custom);
+            Lighting.RenderLightPass();
+            UpdateCamera(ref ControlCorrespondant.camfps, CameraMode.Custom);          
             BeginDrawing();
-
-            BeginBlendMode(BlendMode.Alpha);//TODO: figure out why the hell transparency keeps clipping everything behind it.
             ClearBackground(Raylib_cs.Color.Black);
-            BeginShaderMode(Scenestate.yella);
+            SetShaderValueMatrix(Shadercl.Mat_PBR, Shadercl.lightVPLoc, Lighting.lightViewProj);
+            Rlgl.EnableShader(Shadercl.Mat_PBR.Id);
+            Rlgl.ActiveTextureSlot(Lighting.textureActiveSlot);
+            Rlgl.EnableTexture(Lighting.shadowMap.Depth.Id);
+            var tl = Lighting.textureActiveSlot;
+            Rlgl.SetUniform(Shadercl.shadowMapLoc, &tl, (int)ShaderUniformDataType.Int, 1);
+            SetShaderValueTexture(Shadercl.Mat_PBR, Shadercl.shadowMapLoc, Lighting.shadowMap.Depth);
+            Rlgl.EnableDepthMask();
+            BeginBlendMode(BlendMode.Alpha);//TODO: figure out why the hell transparency keeps clipping everything behind it.
+            //BeginShaderMode(Scenestate.yella);
             Rend_3D.Render_3D();
+            Rlgl.ActiveTextureSlot(Lighting.textureActiveSlot);
+            Rlgl.DisableTexture();
             EndBlendMode();
             EndShaderMode();
             Rend_UI.Render_FpsCounter();
@@ -82,20 +90,4 @@ namespace Engine.Render
         }
     }
 
-    public class Lighting
-    {
-        public static void UpdateLight(Shader shad, GameObjects.Lights lige)
-        {
-
-                SetShaderValue(shad, lige.enabledLoc, lige.Enabled, ShaderUniformDataType.Int);
-                SetShaderValue(shad, lige.typeLoc, lige.Type, ShaderUniformDataType.Int);
-
-
-                SetShaderValue(shad, lige.positionLoc, lige.Position, ShaderUniformDataType.Vec3);
-                
-                SetShaderValue(shad,lige.targetLoc, lige.Target, ShaderUniformDataType.Vec3);
-                SetShaderValue(shad, lige.colorLoc, lige.Colour, ShaderUniformDataType.Vec4);
-                SetShaderValue(shad, lige.intensityLoc, lige.Intensity, ShaderUniformDataType.Float);
-        }
-    }
 }

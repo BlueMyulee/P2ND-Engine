@@ -12,6 +12,7 @@ using Engine.Logics.Sub.PlayerCon.FirstPerson;
 using Engine.Game;
 using ComponentSystem;
 using Engine.Render.MeshSystem;
+using Engine.Render.LightingEngine;
 
 
 namespace Engine_Scenestates
@@ -73,13 +74,11 @@ namespace Engine_Scenestates
                 target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
                 yella = LoadShader(null, "resources/shader/screen/yellowfilter.fs");
                 Engine.scenestate.Entity.LoadMapClusterData(0);
-                
+                Lighting.SetupLCam();
                 Console.WriteLine($"\n\n\n\nINFO: DEBUG: {entities.Count}");
                 MeshMemorySystem.CheckActiveMeshesInScene();
                 MaterialMemorySystem.checkActiveMaterialInScene();
                 
-                                    
-
 
                GC.Collect();
 

@@ -42,16 +42,21 @@ namespace Engine.Resource ///NEXT STEP IS TO COMPLETELY OVERHAUL INTO ECS SYSTEM
         public static Shader Mat_STD;//Used to serve a purpose.
         public static Shader Mat_FBR;//FULLBRIGHT
         public static Shader Mat_CEL;//CEL SHADING WOOHOOOOOOO!!! :DDD
+        public static Shader Shadow;
 
         public static int emissiveIntensityLoc;
         public static int emissiveColorLoc;
         public static int textureTilingLoc;
+        public static int lightVPLoc;
+        public static int shadowMapLoc;
+        public static int shadowmapResoultion = 1024;
 
         public static unsafe void InitializeShaderPBR()
         {
             //mostly OK
             var usage = 1;
             Mat_PBR = LoadShader("resources/shader/pbr.vs", "resources/shader/pbr.fs");
+            Shadow = LoadShader("resources/shader/shadow.vs", null);
             Mat_PBR.Locs[(int)ShaderLocationIndex.MapAlbedo] = GetShaderLocation(Mat_PBR, "albedoMap");
             Mat_PBR.Locs[(int)ShaderLocationIndex.MapMetalness] = GetShaderLocation(Mat_PBR, "mraMap");
             Mat_PBR.Locs[(int)ShaderLocationIndex.MapNormal] = GetShaderLocation(Mat_PBR, "normalMap");
@@ -72,8 +77,13 @@ namespace Engine.Resource ///NEXT STEP IS TO COMPLETELY OVERHAUL INTO ECS SYSTEM
 
             emissiveIntensityLoc = GetShaderLocation(Mat_PBR, "emissivePower");
             emissiveColorLoc = GetShaderLocation(Mat_PBR, "emissiveColor");
-            textureTilingLoc = GetShaderLocation(Mat_PBR, "tiling"); //apparently I didn't set the default value as .5 by .5, See 91.
-
+            textureTilingLoc = GetShaderLocation(Mat_PBR, "tiling"); //apparently I didn't set the default value as .5 by .5, See 98.
+            lightVPLoc = GetShaderLocation(Mat_PBR, "lightVP");
+            shadowMapLoc = GetShaderLocation(Mat_PBR, "shadowMap");
+            Shadow.Locs[(int)ShaderLocationIndex.MatrixMvp] = GetShaderLocation(Shadow, "mvp");
+                
+            
+            SetShaderValue(Mat_PBR, GetShaderLocation(Mat_PBR, "shadowMapResolution"), 1024, ShaderUniformDataType.Int);
             SetShaderValue(Mat_PBR, GetShaderLocation(Mat_PBR, "useTexAlbedo"), &usage, ShaderUniformDataType.Int);
             SetShaderValue(Mat_PBR, GetShaderLocation(Mat_PBR, "useTexNormal"), &usage, ShaderUniformDataType.Int);
             SetShaderValue(Mat_PBR, GetShaderLocation(Mat_PBR, "useTexMRA"), &usage, ShaderUniformDataType.Int);
@@ -93,7 +103,55 @@ namespace Engine.Resource ///NEXT STEP IS TO COMPLETELY OVERHAUL INTO ECS SYSTEM
             var textile = new Vector2(0.5f, 0.5f);
             SetShaderValue(Mat_PBR, textureTilingLoc, &textile, ShaderUniformDataType.Vec2);
         }
+         public static unsafe RenderTexture2D LoadShadowmapRenderTexture(int width, int height)
+            {
+                RenderTexture2D target = new();
 
+                target.Id = Rlgl.LoadFramebuffer();
+                target.Texture.Width = width;
+                target.Texture.Height = height;
+
+                if(target.Id > 0)
+                {
+                    
+                    Rlgl.EnableFramebuffer(target.Id);
+                    
+                    target.Texture.Id = Rlgl.LoadTexture(null, width, height, PixelFormat.UncompressedR8G8B8A8, 1);
+                    target.Texture.Width = width;
+                    target.Texture.Height = height;
+                    target.Texture.Format = PixelFormat.UncompressedR8G8B8A8;
+                    target.Texture.Mipmaps = 1;
+                    
+                    bool useRenderBuffer = false;
+                    target.Depth.Id = Rlgl.LoadTextureDepth(width, height, false);
+                    target.Depth.Width = width;
+                    target.Depth.Height = height;
+                    target.Depth.Format = PixelFormat.UncompressedR32;
+                    target.Depth.Mipmaps = 1;
+
+                    Rlgl.FramebufferAttach(target.Id, target.Texture.Id, FramebufferAttachType.ColorChannel0, FramebufferAttachTextureType.Texture2D, 0);
+                    Rlgl.FramebufferAttach(target.Id, target.Depth.Id, FramebufferAttachType.Depth, FramebufferAttachTextureType.Texture2D, 0);
+
+                    if(Rlgl.FramebufferComplete(target.Id))
+                    TraceLog(TraceLogLevel.Info, $"FBO: {target.Id} Framebuffer object created successfully");
+
+                    Rlgl.DisableFramebuffer();
+                }
+
+                else TraceLog(TraceLogLevel.Warning, "Object Not created");
+
+                return target;
+            }
+
+            public static void UnloadShadowmapRenderTexture(RenderTexture2D target)
+            {
+                {
+                    if(target.Id > 0)
+                    {
+                        Rlgl.UnloadFramebuffer(target.Id);
+                    }
+                }
+            }
     }
     
 }

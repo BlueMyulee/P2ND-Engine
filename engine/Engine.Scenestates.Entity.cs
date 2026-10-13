@@ -67,6 +67,9 @@ namespace Engine.scenestate
                         case "lightdir":
                             Engine_Scenestates.Scenestate.entities[curcount].AddComponent(new LightDir());
                             var lightdirops = Engine_Scenestates.Scenestate.entities[curcount].GetComponent<LightDir>();
+                            Render.LightingEngine.Lighting.lightCount ++;
+                            Render.LightingEngine.Lighting.lightAddress = Render.LightingEngine.Lighting.lightAddress.Append(1).ToArray();
+                            Render.LightingEngine.Lighting.lightAddress[Render.LightingEngine.Lighting.lightAddress.Length - 1] = curcount;
                             lightdirops.target.X = reference[0];
                             lightdirops.target.Y = reference[1];
                             lightdirops.target.Z = reference[2];

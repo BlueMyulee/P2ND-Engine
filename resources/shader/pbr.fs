@@ -87,13 +87,20 @@ float GeomSmith(float nDotV,float nDotL,float roughness)
     return ggx1*ggx2;
 }
 
-vec3 ComputeShadows()
+float ComputeShadows(vec3 normal, vec3 l)
 {
     vec4 fragPosLightSpace = lightVP*vec4(fragPosition, 1);
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
-    if (projCoords.z > 1.0)
+    if (projCoords.z > 1.0 ||
+    projCoords.z < 0.0 ||
+    projCoords.x < 0.0 ||
+    projCoords.x > 1.0 ||
+    projCoords.y < 0.0 ||
+    projCoords.y > 1.0)
+{
     return 1.0;
+}
     
     float bias = max(0.0002*(1.0 - dot(normal, l)), 0.00002) + 0.00001;
 
@@ -170,8 +177,8 @@ vec3 ComputePBR()
         vec3 H = normalize(V + L);
         vec3 radiance = lights[i].color.rgb * lights[i].intensity * attenuation;
 
-        if (lights[i].type == LIGHT_DIRECTIONAL)
-            radiance *= ComputeShadows(N, L);
+        //if (lights[i].type == LIGHT_DIRECTIONAL)
+        //radiance *= ComputeShadows(N, L);
         // === Cook–Torrance ===
         float nDotV = max(dot(N, V), 0.0000001);
         float nDotL = max(dot(N, L), 0.0000001);

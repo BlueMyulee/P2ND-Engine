@@ -31,34 +31,7 @@ namespace Engine.Game.Objects
     }
     public class GameObjects
     {
-        public class Props
-        {
-            public Model Mdl { get; set; }
-            public int RefID { get; set; }
-            public Prop_types Type { get; set; }
-            public string Name_ID { get; set; }
-            public bool IsInteractable { get; set; }
-            public int InteractionId { get; set; }
-            public Vector3 Position { get; set; }
-            public float Size { get; set; }
-            public Vector3 Rotation { get; set; }
-
-            public Props(Model md, int rid, Prop_types typ, string nam, bool isin, int intid, Vector3 pos, Vector3 rot, float scla)
-            {
-                Mdl = md;
-                RefID = rid;
-                Type = typ;
-                Name_ID = nam;
-                IsInteractable = isin;
-                InteractionId = intid;
-                Position = pos;
-                Rotation = rot;
-                Size = scla;
-            }
-
-        }
-
-
+        public Camera3D lightCam;
 
         public class Brush // Will not use this other than testing purpose, otherwise will clone instance to make collision detection maybe
         {
@@ -86,9 +59,7 @@ namespace Engine.Game.Objects
             public int targetLoc;
             public int colorLoc;
             public int intensityLoc;
-            public int lightVPLoc;
-            public int shadowMapLoc;
-            public static int shadowmapResoultion = 1024;
+
             public Lights(Vector3 pos, Vector3 targ, bool enbl, Light_types typ, Raylib_cs.Color colr, float intes, Shader shd)
             {
                 Position = pos;
@@ -110,9 +81,8 @@ namespace Engine.Game.Objects
                 targetLoc = GetShaderLocation(shd, "lights[" + lightCount + "].target");
                 colorLoc = GetShaderLocation(shd, "lights[" + lightCount + "].color");
                 intensityLoc = GetShaderLocation(shd, "lights[" + lightCount + "].intensity");
-                lightVPLoc = GetShaderLocation(shd, "lightVP");
-                shadowMapLoc = GetShaderLocation(shd, "shadowMap");
-                SetShaderValue(shd, GetShaderLocation(shd, "shadowMapResolution"), shadowmapResoultion, ShaderUniformDataType.Int);
+
+
                 System.Console.WriteLine($"||LIGHT PASS {lightCount}............ " + positionLoc + ".");
                 lightCount++;
                 
@@ -132,6 +102,10 @@ namespace Engine.Game.Objects
 
                 SetShaderValue(shade_sc, light_sc.intensityLoc, light_sc.Intensity, ShaderUniformDataType.Float);
             }
+
+           
+
+            
         }
 
     }
